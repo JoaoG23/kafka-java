@@ -9,12 +9,11 @@ import java.util.Collections;
 import java.util.Properties;
 
 public class Consumer {
-
 	public static void main(String[] args) {
 		var consumer = new KafkaConsumer<String, String>(properties());
 		// consumir as mesagens
 
-		consumer.subscribe(Collections.singletonList("compras.do.cliente"));
+		consumer.subscribe(Collections.singletonList("ecommerce.compras.teste"));
 
 		while (true) {
 			// What time in time to consumer
@@ -37,7 +36,15 @@ public class Consumer {
 		properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
 		// to Serialize the value
 		properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-		properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "consumo-cliente");
+
+		properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest"); // to consume sinces start
+		properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "ecommerce-teste-2");
+		// groupId: ecommerce-teste = 3 msgs
+		// groupId: ecommerce-teste-2 = 3 msgs
+
+		// Publish 2 mensagens
+		// groupId: ecommerce-teste-3 = 5 Mensagens
+
 		return properties;
 	}
 }
